@@ -6,6 +6,7 @@ const authRoutes = require("./app/auth/auth.routes");
 const authenticate = require("./middlewares/auth.middleware");
 const authorize = require("./middlewares/authorize.middleware");
 
+const roleRoutes = require("./app/roles/role.routes");
 const app = express();
 
 app.use(express.json());
@@ -13,6 +14,7 @@ app.use(cookieParser());
 
 app.use("/rest/onboardings", authRoutes);
 
+app.use("/rest/roles", roleRoutes);
 app.get(
   "/cfo-only",
   authenticate,
@@ -24,5 +26,8 @@ app.get(
     });
   }
 );
+app.get("/whoami", authenticate, (req, res) => {
+  res.json(req.user);
+});
 
 module.exports = app;

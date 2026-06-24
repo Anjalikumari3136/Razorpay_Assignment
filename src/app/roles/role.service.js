@@ -35,14 +35,6 @@ const assignRoleToUser = async ({
   return result.rows[0];
 };
 
-if (
-  user.email === "cfo@org.com" &&
-  role !== "CFO"
-) {
-  throw new Error(
-    "Cannot modify CFO role"
-  );
-}
 
 module.exports = {
   assignRoleToUser,

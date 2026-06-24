@@ -15,6 +15,15 @@ app.use(cookieParser());
 app.use("/rest/onboardings", authRoutes);
 
 app.use("/rest/roles", roleRoutes);
+
+const reimbursementRoutes = require(
+  "./app/reimbursements/reimbursement.routes"
+);
+
+app.use(
+  "/rest/reimbursements",
+  reimbursementRoutes
+);
 app.get(
   "/cfo-only",
   authenticate,

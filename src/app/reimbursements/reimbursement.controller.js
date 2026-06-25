@@ -4,6 +4,9 @@ const {
   getPendingForRM,
   rmApprove,
   rmReject,
+  getRMApprovedList,
+  apeApprove,
+  apeReject,
 } = require("./reimbursement.service");
 
 const createReimbursement = async (req, res) => {
@@ -100,10 +103,66 @@ const rejectByRM = async (req, res) => {
   }
 };
 
+const getRMApproved = async (req, res) => {
+  try {
+    const data = await getRMApprovedList();
+
+    res.status(200).json({
+      success: true,
+      data,
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+const apeApproveController = async (req, res) => {
+  try {
+    const data = await apeApprove(
+      req.params.id,
+      req.body?.comment
+    );
+
+    res.status(200).json({
+      success: true,
+      data,
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+const apeRejectController = async (req, res) => {
+  try {
+    const data = await apeReject(
+      req.params.id,
+      req.body?.comment
+    );
+
+    res.status(200).json({
+      success: true,
+      data,
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
 module.exports = {
   createReimbursement,
   getMyReimbursements,
   getPendingReimbursements,
   approveByRM,
   rejectByRM,
+  getRMApproved,
+  apeApproveController,
+  apeRejectController,
 };

@@ -114,6 +114,53 @@ const rmReject = async (
   return result.rows[0];
 };
 
+const getRMApprovedList = async () => {
+  const result = await pool.query(
+    `
+    SELECT *
+    FROM reimbursements
+    WHERE status = 'RM_APPROVED'
+    ORDER BY created_at DESC
+    `
+  );
+
+  return result.rows;
+};
+
+const apeApprove = async (id, comment) => {
+  const result = await pool.query(
+    `
+    UPDATE reimbursements
+    SET
+      status = 'APPROVED',
+      ape_comment = $1,
+      updated_at = NOW()
+    WHERE id = $2
+    RETURNING *
+    `,
+    [comment || null, id]
+  );
+
+  return result.rows[0];
+};
+
+const apeReject = async (id, comment) => {
+  const result = await pool.query(
+    `
+    UPDATE reimbursements
+    SET
+      status = 'REJECTED',
+      ape_comment = $1,
+      updated_at = NOW()
+    WHERE id = $2
+    RETURNING *
+    `,
+    [comment || null, id]
+  );
+
+  return result.rows[0];
+};
+
 
 module.exports = {
   createNewReimbursement,
@@ -121,4 +168,7 @@ module.exports = {
   getPendingForRM,
   rmApprove,
   rmReject,
+  getRMApprovedList,
+  apeApprove,
+  apeReject,
 };

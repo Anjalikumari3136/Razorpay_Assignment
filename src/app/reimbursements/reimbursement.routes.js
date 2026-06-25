@@ -7,14 +7,15 @@ const authorize = require("../../middlewares/authorize.middleware");
 const {
   createReimbursement,
   getMyReimbursements,
-} = require("./reimbursement.controller");
-
-const {
   getPendingReimbursements,
   approveByRM,
   rejectByRM,
+  getRMApproved,
+  apeApproveController,
+  apeRejectController,
 } = require("./reimbursement.controller");
 
+// EMP
 router.post(
   "/",
   authenticate,
@@ -29,7 +30,7 @@ router.get(
   getMyReimbursements
 );
 
-
+// RM
 router.get(
   "/pending",
   authenticate,
@@ -51,5 +52,26 @@ router.post(
   rejectByRM
 );
 
+// APE
+router.get(
+  "/rm-approved",
+  authenticate,
+  authorize("APE"),
+  getRMApproved
+);
+
+router.post(
+  "/:id/ape-approve",
+  authenticate,
+  authorize("APE"),
+  apeApproveController
+);
+
+router.post(
+  "/:id/ape-reject",
+  authenticate,
+  authorize("APE"),
+  apeRejectController
+);
 
 module.exports = router;

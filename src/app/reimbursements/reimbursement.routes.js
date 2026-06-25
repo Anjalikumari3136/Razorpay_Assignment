@@ -3,6 +3,7 @@ const router = express.Router();
 
 const authenticate = require("../../middlewares/auth.middleware");
 const authorize = require("../../middlewares/authorize.middleware");
+const validate = require("../../middlewares/validate.middleware");
 
 const {
   createReimbursement,
@@ -15,11 +16,18 @@ const {
   apeRejectController,
 } = require("./reimbursement.controller");
 
+const {
+  createReimbursementSchema,
+  idParamSchema,
+  approvalBodySchema,
+} = require("./reimbursement.dto");
+
 // EMP
 router.post(
   "/",
   authenticate,
   authorize("EMP"),
+  validate({ body: createReimbursementSchema }),
   createReimbursement
 );
 
@@ -42,6 +50,7 @@ router.post(
   "/:id/rm-approve",
   authenticate,
   authorize("RM"),
+  validate({ params: idParamSchema, body: approvalBodySchema }),
   approveByRM
 );
 
@@ -49,6 +58,7 @@ router.post(
   "/:id/rm-reject",
   authenticate,
   authorize("RM"),
+  validate({ params: idParamSchema, body: approvalBodySchema }),
   rejectByRM
 );
 
@@ -64,6 +74,7 @@ router.post(
   "/:id/ape-approve",
   authenticate,
   authorize("APE"),
+  validate({ params: idParamSchema, body: approvalBodySchema }),
   apeApproveController
 );
 
@@ -71,6 +82,7 @@ router.post(
   "/:id/ape-reject",
   authenticate,
   authorize("APE"),
+  validate({ params: idParamSchema, body: approvalBodySchema }),
   apeRejectController
 );
 

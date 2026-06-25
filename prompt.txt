@@ -1,0 +1,119 @@
+You are a senior Node.js backend engineer.
+
+I have already completed my Express.js backend project. I only want to implement validation. Do NOT modify business logic, database logic, authentication flow, authorization flow, controllers, services, routes, response structure, folder structure, or existing functionality unless absolutely required for validation integration.
+
+Project stack:
+
+* Node.js
+* Express.js
+* PostgreSQL
+* Drizzle ORM
+* JWT Authentication
+* Role-based access control
+
+IMPORTANT REQUIREMENTS:
+
+1. Implement validation using Zod only.
+2. Follow feature-based structure.
+3. Do NOT create a global DTO folder.
+4. Create DTO files inside each module folder:
+
+Example:
+
+src/app/auth/auth.dto.js
+src/app/roles/role.dto.js
+src/app/reimbursements/reimbursement.dto.js
+
+5. Reuse existing project structure.
+6. Do NOT rename files.
+7. Do NOT move files.
+8. Do NOT refactor controllers or services.
+9. Do NOT change API routes.
+10. Do NOT change database schema.
+11. Do NOT change API response format unless validation fails.
+12. Only add the minimum code necessary for validation.
+
+Validation Tasks:
+
+AUTH MODULE
+
+* Validate login request body
+* email must be valid
+* password required
+* password minimum 6 characters
+
+ROLES MODULE
+
+* role_name required
+* trim whitespace
+* minimum length 2
+* maximum length 50
+
+REIMBURSEMENTS MODULE
+
+* title required
+
+* trim whitespace
+
+* minimum length 3
+
+* maximum length 100
+
+* description optional
+
+* if provided, minimum length 5
+
+* amount required
+
+* must be positive number
+
+* employee_id required
+
+* positive integer
+
+PARAM VALIDATION
+
+* validate all route ids
+* id must be positive integer
+
+APPROVAL APIs
+
+* reimbursement id must be positive integer
+* comment optional
+* maximum length 500
+
+IMPLEMENTATION STYLE
+
+Create Zod schemas in:
+
+* auth.dto.js
+* role.dto.js
+* reimbursement.dto.js
+
+Create a reusable validation middleware only if necessary.
+
+Use:
+
+schema.safeParse(req.body)
+
+schema.safeParse(req.params)
+
+schema.safeParse(req.query)
+
+Validation Error Response:
+
+{
+"success": false,
+"message": "Validation failed",
+"errors": [...]
+}
+
+DELIVERABLES
+
+1. Show every file that needs modification.
+2. Show exact code changes.
+4. Identify endpoints currently missing validation.
+5. Do not make any changes unrelated to validation.
+6. Preserve all existing functionality exactly as it is.
+
+Before generating code, first analyze the project structure and list all endpoints that require validation.

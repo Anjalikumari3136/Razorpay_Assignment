@@ -7,8 +7,34 @@ const {
   logout,
 } = require("./auth.controller");
 
-router.post("/register", register);
-router.post("/login", login);
+const validate = require("../../middlewares/validate.middleware");
+const { loginSchema, registerSchema } = require("./auth.dto");
+
+router.post("/register", validate({ body: registerSchema }), register);
+router.post("/login", validate({ body: loginSchema }), login);
 router.post("/logout", logout);
+
+
+/**
+ * @swagger
+ * /rest/onboardings/login:
+ *   post:
+ *     summary: User Login
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Login successful
+ */
+router.post('/login', login)
 
 module.exports = router;

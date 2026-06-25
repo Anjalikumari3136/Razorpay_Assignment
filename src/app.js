@@ -1,3 +1,6 @@
+const swaggerUi = require('swagger-ui-express');
+const swaggerJsdoc = require('swagger-jsdoc');
+
 const express = require("express");
 const cookieParser = require("cookie-parser");
 
@@ -16,6 +19,26 @@ app.use("/rest/onboardings", authRoutes);
 
 app.use("/rest/roles", roleRoutes);
 
+const options = {
+  definition: {
+    openapi: '3.0.0',
+    info: {
+      title: 'Razorpay API',
+      version: '1.0.0',
+      description: 'API Documentation',
+    },
+  },
+  apis: ['./src/app/**/*.routes.js'],
+};
+
+const specs = swaggerJsdoc(options);
+
+app.use(
+  '/api-docs',
+  swaggerUi.serve,
+  swaggerUi.setup(specs)
+);
+
 const reimbursementRoutes = require(
   "./app/reimbursements/reimbursement.routes"
 );
@@ -24,6 +47,7 @@ app.use(
   "/rest/reimbursements",
   reimbursementRoutes
 );
+
 app.get(
   "/cfo-only",
   authenticate,
@@ -35,8 +59,14 @@ app.get(
     });
   }
 );
+
 app.get("/whoami", authenticate, (req, res) => {
   res.json(req.user);
+});
+
+// Root route
+app.get("/", (req, res) => {
+  res.json({ message: "Server is running" });
 });
 
 module.exports = app;
